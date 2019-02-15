@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 14.5, 11.625" name="librarydb">
+  <DataContextMoniker Name="/librarydbDataContext" />
+  <nestedChildShapes>
+    <classShape Id="e0953982-388d-4e18-a884-2533e3383f28" absoluteBounds="0.75, 1.25, 2, 1.1939925130208335">
+      <DataClassMoniker Name="/librarydbDataContext/AspNetRole" />
+      <nestedChildShapes>
+        <elementListCompartment Id="976836d9-6fa6-4fdd-8aa1-ffd9ab65c89c" absoluteBounds="0.765, 1.71, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="560a2d58-bd7c-445e-ad53-1c85ce0c9d94" absoluteBounds="3.5, 6.375, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/librarydbDataContext/AspNetUserClaim" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3114e799-d5b8-440f-8ab3-8794be63c0c9" absoluteBounds="3.515, 6.835, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="11d4ea77-f615-4a11-9de4-a88bf3f5fd22" absoluteBounds="3.5, 4.25, 2, 1.3862939453125005">
+      <DataClassMoniker Name="/librarydbDataContext/AspNetUserLogin" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1eddfa12-551b-44db-bd3b-e78cb12cada5" absoluteBounds="3.515, 4.71, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b8fb298f-5cd4-4c30-94ac-61ddb01a2ca5" absoluteBounds="3.5, 2.25, 2, 1.1939925130208335">
+      <DataClassMoniker Name="/librarydbDataContext/AspNetUserRole" />
+      <nestedChildShapes>
+        <elementListCompartment Id="72d8ed52-133c-4347-acc5-9827d9630ebd" absoluteBounds="3.515, 2.71, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="cbba0a3b-ae11-47a3-be83-458980a856b6" absoluteBounds="0.75, 4.125, 2, 3.5016097005208326">
+      <DataClassMoniker Name="/librarydbDataContext/AspNetUser" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7a26395e-0b38-4111-b68b-83e04becf16f" absoluteBounds="0.765, 4.585, 1.9700000000000002, 2.941609700520833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="bbd39f4a-2830-4c1f-9096-80fed904f228" absoluteBounds="12.25, 1, 2, 2.5401025390625005">
+      <DataClassMoniker Name="/librarydbDataContext/MstLibraryBook" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d02caf55-cf5b-46c3-a055-b08f143e80d7" absoluteBounds="12.265, 1.46, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="92530d05-0cdf-40d9-ba92-cf62cdf8d365" absoluteBounds="3.5, 8.625, 2, 2.7324039713541666">
+      <DataClassMoniker Name="/librarydbDataContext/MstTransaction" />
+      <nestedChildShapes>
+        <elementListCompartment Id="25000712-1e57-44fd-a9ac-597fb76a50f2" absoluteBounds="3.515, 9.085, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="07ec2738-2636-4b30-a1ee-6aeef6485932" absoluteBounds="9.5, 1.125, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/librarydbDataContext/MstUser" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2805b0e3-d846-4250-b933-226588814f37" absoluteBounds="9.515, 1.585, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="022baaa3-118c-4c1d-bcad-2b18eb49b36a" absoluteBounds="6.75, 1.625, 2, 1.1939925130208335">
+      <DataClassMoniker Name="/librarydbDataContext/MstUserType" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c692da51-0bcb-4620-af81-bbd0098a2ff2" absoluteBounds="6.765, 2.085, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(1.75 : 2.44399251302083); (1.75 : 2.67340811423277); (3.5 : 2.67340811423277)]" fixedFrom="Algorithm" fixedTo="NotFixed">
+      <AssociationMoniker Name="/librarydbDataContext/AspNetRole/AspNetRole_AspNetUserRole" />
+      <nodes>
+        <classShapeMoniker Id="e0953982-388d-4e18-a884-2533e3383f28" />
+        <classShapeMoniker Id="b8fb298f-5cd4-4c30-94ac-61ddb01a2ca5" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 7.00080485026042); (3.5 : 7.00080485026042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/librarydbDataContext/AspNetUser/AspNetUser_AspNetUserClaim" />
+      <nodes>
+        <classShapeMoniker Id="cbba0a3b-ae11-47a3-be83-458980a856b6" />
+        <classShapeMoniker Id="560a2d58-bd7c-445e-ad53-1c85ce0c9d94" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 4.94314697265625); (3.5 : 4.94314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/librarydbDataContext/AspNetUser/AspNetUser_AspNetUserLogin" />
+      <nodes>
+        <classShapeMoniker Id="cbba0a3b-ae11-47a3-be83-458980a856b6" />
+        <classShapeMoniker Id="11d4ea77-f615-4a11-9de4-a88bf3f5fd22" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 4.12653746153846); (3.125 : 3.75153746153846); (3.125 : 2.84699625651042); (3.5 : 2.84699625651042)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+      <AssociationMoniker Name="/librarydbDataContext/AspNetUser/AspNetUser_AspNetUserRole" />
+      <nodes>
+        <classShapeMoniker Id="cbba0a3b-ae11-47a3-be83-458980a856b6" />
+        <classShapeMoniker Id="b8fb298f-5cd4-4c30-94ac-61ddb01a2ca5" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(1.75 : 7.62660970052083); (1.75 : 9.99120198567708); (3.5 : 9.99120198567708)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/librarydbDataContext/AspNetUser/AspNetUser_MstTransaction" />
+      <nodes>
+        <classShapeMoniker Id="cbba0a3b-ae11-47a3-be83-458980a856b6" />
+        <classShapeMoniker Id="92530d05-0cdf-40d9-ba92-cf62cdf8d365" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.2812525 : 7.62660970052083); (2.2812525 : 9.27684849283854); (3.5 : 9.27684849283854)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/librarydbDataContext/AspNetUser/AspNetUser_MstTransaction1" />
+      <nodes>
+        <classShapeMoniker Id="cbba0a3b-ae11-47a3-be83-458980a856b6" />
+        <classShapeMoniker Id="92530d05-0cdf-40d9-ba92-cf62cdf8d365" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(1.2187475 : 7.62660970052083); (1.2187475 : 10.7055554785156); (3.5 : 10.7055554785156)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/librarydbDataContext/AspNetUser/AspNetUser_MstTransaction2" />
+      <nodes>
+        <classShapeMoniker Id="cbba0a3b-ae11-47a3-be83-458980a856b6" />
+        <classShapeMoniker Id="92530d05-0cdf-40d9-ba92-cf62cdf8d365" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(11.5 : 2.20274983723958); (12.25 : 2.20274983723958)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/librarydbDataContext/MstUser/MstUser_MstLibraryBook" />
+      <nodes>
+        <classShapeMoniker Id="07ec2738-2636-4b30-a1ee-6aeef6485932" />
+        <classShapeMoniker Id="bbd39f4a-2830-4c1f-9096-80fed904f228" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(8.75 : 2.22199625651042); (9.5 : 2.22199625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/librarydbDataContext/MstUserType/MstUserType_MstUser" />
+      <nodes>
+        <classShapeMoniker Id="022baaa3-118c-4c1d-bcad-2b18eb49b36a" />
+        <classShapeMoniker Id="07ec2738-2636-4b30-a1ee-6aeef6485932" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
