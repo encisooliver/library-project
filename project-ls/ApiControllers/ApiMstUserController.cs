@@ -15,15 +15,14 @@ namespace project_ls.ApiControllers
     {
         private Data.librarydbDataContext db = new Data.librarydbDataContext();
 
+        // ==========
+        // Add - User
+        // ==========
         [HttpPost, Route("api/user/add")]
         public HttpResponseMessage AddUser(Entities.MstUser objMstUser)
         {
             try
             {
-                //var userTypeID = from d in db.MstUserTypes
-                //                 select d.Id;
-                //var currentUserTypeId = userTypeID.FirstOrDefault();
-
                 Data.MstUser mstUser = new Data.MstUser
                 {
                     UserName = objMstUser.UserName,
@@ -31,7 +30,6 @@ namespace project_ls.ApiControllers
                     LastName = objMstUser.LastName,
                     Email = objMstUser.Email,
                     Password = objMstUser.Password,
-                    //UserTypeId = currentUserTypeId
                     UserTypeId = objMstUser.UserTypeId
                 };
                 db.MstUsers.InsertOnSubmit(mstUser);
@@ -45,11 +43,29 @@ namespace project_ls.ApiControllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "Something's went wrong from the server.");
             }
         }
+        // ===============
+        // List UserTypeId
+        // ===============
+        [HttpGet, Route("api/user/UserType")]
+        public List<Entities.MstUserType> UserTypeList()
+        {
+            var userType = from d in db.MstUserTypes
+                           select new Entities.MstUserType
+                           {
+                               Id = d.Id,
+                               UserType = d.UserType
+                           };
 
+            return userType.ToList();
+        }
+
+        // ===========
+        // List - User
+        // ===========
         [HttpGet, Route("api/user/list")]
         public List<Entities.MstUser> UserList()
         {
-            var users = from d in db.MstUsers
+            var userList = from d in db.MstUsers
                        select new Entities.MstUser
                        {
                            Id = d.Id,
@@ -61,10 +77,13 @@ namespace project_ls.ApiControllers
                            UserTypeId = d.UserTypeId
                        };
 
-            return users.ToList();
+            return userList.ToList();
         }
 
-        [HttpGet, Route("detail/{id}")]
+        // =============
+        // Detail - User
+        // =============
+        [HttpGet, Route("api/user/detail/{id}")]
         public List<Entities.MstUser> IndividualUser(String id)
         {
             var user = from d in db.MstUsers
@@ -83,8 +102,11 @@ namespace project_ls.ApiControllers
             return user.ToList();
         }
 
-        [HttpPut, Route("update/{id}")]
-        public HttpResponseMessage UpdateUser(String id, Entities.MstUser objUpdateUser)
+        // =============
+        // Update - User
+        // =============
+        [HttpPut, Route("api/user/update/{id}")]
+        public HttpResponseMessage UpdateUser(Entities.MstUser objUpdateUser, String id)
         {
             try
             {
@@ -128,8 +150,8 @@ namespace project_ls.ApiControllers
         // =============
         // Delete - User
         // =============
-        [HttpDelete, Route("delete/{id}")]
-        public HttpResponseMessage DeleteUserRate(String id)
+        [HttpDelete, Route("api/user/delete/{id}")]
+        public HttpResponseMessage DeleteUser(String id)
         {
             try
             {

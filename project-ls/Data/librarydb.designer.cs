@@ -284,7 +284,7 @@ namespace project_ls.Data
 		
 		private int _Id;
 		
-		private int _UserId;
+		private string _UserId;
 		
 		private string _ClaimType;
 		
@@ -298,7 +298,7 @@ namespace project_ls.Data
     partial void OnCreated();
     partial void OnIdChanging(int value);
     partial void OnIdChanged();
-    partial void OnUserIdChanging(int value);
+    partial void OnUserIdChanging(string value);
     partial void OnUserIdChanged();
     partial void OnClaimTypeChanging(string value);
     partial void OnClaimTypeChanged();
@@ -332,8 +332,8 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int NOT NULL")]
-		public int UserId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string UserId
 		{
 			get
 			{
@@ -423,7 +423,7 @@ namespace project_ls.Data
 					}
 					else
 					{
-						this._UserId = default(int);
+						this._UserId = default(string);
 					}
 					this.SendPropertyChanged("AspNetUser");
 				}
@@ -461,7 +461,7 @@ namespace project_ls.Data
 		
 		private string _ProviderKey;
 		
-		private int _UserId;
+		private string _UserId;
 		
 		private EntityRef<AspNetUser> _AspNetUser;
 		
@@ -473,7 +473,7 @@ namespace project_ls.Data
     partial void OnLoginProviderChanged();
     partial void OnProviderKeyChanging(string value);
     partial void OnProviderKeyChanged();
-    partial void OnUserIdChanging(int value);
+    partial void OnUserIdChanging(string value);
     partial void OnUserIdChanged();
     #endregion
 		
@@ -523,8 +523,8 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int UserId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string UserId
 		{
 			get
 			{
@@ -574,7 +574,7 @@ namespace project_ls.Data
 					}
 					else
 					{
-						this._UserId = default(int);
+						this._UserId = default(string);
 					}
 					this.SendPropertyChanged("AspNetUser");
 				}
@@ -608,7 +608,7 @@ namespace project_ls.Data
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _UserId;
+		private string _UserId;
 		
 		private string _RoleId;
 		
@@ -620,7 +620,7 @@ namespace project_ls.Data
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnUserIdChanging(int value);
+    partial void OnUserIdChanging(string value);
     partial void OnUserIdChanged();
     partial void OnRoleIdChanging(string value);
     partial void OnRoleIdChanged();
@@ -633,8 +633,8 @@ namespace project_ls.Data
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int UserId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string UserId
 		{
 			get
 			{
@@ -742,7 +742,7 @@ namespace project_ls.Data
 					}
 					else
 					{
-						this._UserId = default(int);
+						this._UserId = default(string);
 					}
 					this.SendPropertyChanged("AspNetUser");
 				}
@@ -776,11 +776,11 @@ namespace project_ls.Data
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _Id;
+		private string _Id;
 		
 		private string _Email;
 		
-		private bool _EmailConfirmed;
+		private System.Nullable<bool> _EmailConfirmed;
 		
 		private string _PasswordHash;
 		
@@ -788,15 +788,15 @@ namespace project_ls.Data
 		
 		private string _PhoneNumber;
 		
-		private bool _PhoneNumberConfirmed;
+		private System.Nullable<bool> _PhoneNumberConfirmed;
 		
-		private bool _TwoFactorEnabled;
+		private System.Nullable<bool> _TwoFactorEnabled;
 		
 		private System.Nullable<System.DateTime> _LockoutEndDateUtc;
 		
-		private bool _LockoutEnabled;
+		private System.Nullable<bool> _LockoutEnabled;
 		
-		private int _AccessFailedCount;
+		private System.Nullable<int> _AccessFailedCount;
 		
 		private string _UserName;
 		
@@ -820,11 +820,11 @@ namespace project_ls.Data
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnIdChanging(int value);
+    partial void OnIdChanging(string value);
     partial void OnIdChanged();
     partial void OnEmailChanging(string value);
     partial void OnEmailChanged();
-    partial void OnEmailConfirmedChanging(bool value);
+    partial void OnEmailConfirmedChanging(System.Nullable<bool> value);
     partial void OnEmailConfirmedChanged();
     partial void OnPasswordHashChanging(string value);
     partial void OnPasswordHashChanged();
@@ -832,15 +832,15 @@ namespace project_ls.Data
     partial void OnSecurityStampChanged();
     partial void OnPhoneNumberChanging(string value);
     partial void OnPhoneNumberChanged();
-    partial void OnPhoneNumberConfirmedChanging(bool value);
+    partial void OnPhoneNumberConfirmedChanging(System.Nullable<bool> value);
     partial void OnPhoneNumberConfirmedChanged();
-    partial void OnTwoFactorEnabledChanging(bool value);
+    partial void OnTwoFactorEnabledChanging(System.Nullable<bool> value);
     partial void OnTwoFactorEnabledChanged();
     partial void OnLockoutEndDateUtcChanging(System.Nullable<System.DateTime> value);
     partial void OnLockoutEndDateUtcChanged();
-    partial void OnLockoutEnabledChanging(bool value);
+    partial void OnLockoutEnabledChanging(System.Nullable<bool> value);
     partial void OnLockoutEnabledChanged();
-    partial void OnAccessFailedCountChanging(int value);
+    partial void OnAccessFailedCountChanging(System.Nullable<int> value);
     partial void OnAccessFailedCountChanged();
     partial void OnUserNameChanging(string value);
     partial void OnUserNameChanged();
@@ -861,8 +861,8 @@ namespace project_ls.Data
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="NVarChar(128) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string Id
 		{
 			get
 			{
@@ -881,7 +881,7 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Email", DbType="NVarChar(256)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Email", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
 		public string Email
 		{
 			get
@@ -901,8 +901,8 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmailConfirmed", DbType="Bit NOT NULL")]
-		public bool EmailConfirmed
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmailConfirmed", DbType="Bit")]
+		public System.Nullable<bool> EmailConfirmed
 		{
 			get
 			{
@@ -921,7 +921,7 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PasswordHash", DbType="NVarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PasswordHash", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
 		public string PasswordHash
 		{
 			get
@@ -981,8 +981,8 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PhoneNumberConfirmed", DbType="Bit NOT NULL")]
-		public bool PhoneNumberConfirmed
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PhoneNumberConfirmed", DbType="Bit")]
+		public System.Nullable<bool> PhoneNumberConfirmed
 		{
 			get
 			{
@@ -1001,8 +1001,8 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TwoFactorEnabled", DbType="Bit NOT NULL")]
-		public bool TwoFactorEnabled
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TwoFactorEnabled", DbType="Bit")]
+		public System.Nullable<bool> TwoFactorEnabled
 		{
 			get
 			{
@@ -1041,8 +1041,8 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LockoutEnabled", DbType="Bit NOT NULL")]
-		public bool LockoutEnabled
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LockoutEnabled", DbType="Bit")]
+		public System.Nullable<bool> LockoutEnabled
 		{
 			get
 			{
@@ -1061,8 +1061,8 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccessFailedCount", DbType="Int NOT NULL")]
-		public int AccessFailedCount
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccessFailedCount", DbType="Int")]
+		public System.Nullable<int> AccessFailedCount
 		{
 			get
 			{
@@ -1488,7 +1488,7 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CopyRightDate", DbType="Date NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CopyRightDate", DbType="DateTime NOT NULL")]
 		public System.DateTime CopyRightDate
 		{
 			get
@@ -1631,7 +1631,7 @@ namespace project_ls.Data
 		
 		private string _Status;
 		
-		private int _UserId;
+		private string _UserId;
 		
 		private EntityRef<AspNetUser> _AspNetUser;
 		
@@ -1661,7 +1661,7 @@ namespace project_ls.Data
     partial void OnDateReturnChanged();
     partial void OnStatusChanging(string value);
     partial void OnStatusChanged();
-    partial void OnUserIdChanging(int value);
+    partial void OnUserIdChanging(string value);
     partial void OnUserIdChanged();
     #endregion
 		
@@ -1853,8 +1853,8 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="Int NOT NULL")]
-		public int UserId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string UserId
 		{
 			get
 			{
@@ -1905,7 +1905,7 @@ namespace project_ls.Data
 					}
 					else
 					{
-						this._UserId = default(int);
+						this._UserId = default(string);
 					}
 					this.SendPropertyChanged("AspNetUser");
 				}
@@ -1939,7 +1939,7 @@ namespace project_ls.Data
 					}
 					else
 					{
-						this._UserId = default(int);
+						this._UserId = default(string);
 					}
 					this.SendPropertyChanged("AspNetUser1");
 				}
@@ -1973,7 +1973,7 @@ namespace project_ls.Data
 					}
 					else
 					{
-						this._UserId = default(int);
+						this._UserId = default(string);
 					}
 					this.SendPropertyChanged("AspNetUser2");
 				}

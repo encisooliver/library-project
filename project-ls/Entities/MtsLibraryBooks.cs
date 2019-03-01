@@ -5,7 +5,7 @@ using System.Web;
 
 namespace project_ls.Entities
 {
-    public class MtsLibraryBooks
+    public class MtsLibraryBook
     {
         public Int32 Id { get; set; }
         public Int32 BookNumber { get; set; }
