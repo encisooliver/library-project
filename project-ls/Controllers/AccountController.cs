@@ -16,6 +16,7 @@ using Microsoft.Owin.Security.OAuth;
 using project_ls.Models;
 using project_ls.Providers;
 using project_ls.Results;
+using System.Linq;
 
 namespace project_ls.Controllers
 {
@@ -125,7 +126,7 @@ namespace project_ls.Controllers
 
             IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
-            
+
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
@@ -258,9 +259,9 @@ namespace project_ls.Controllers
             if (hasRegistered)
             {
                 Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-                
-                 ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                    OAuthDefaults.AuthenticationType);
+
+                ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
+                   OAuthDefaults.AuthenticationType);
                 ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
                     CookieAuthenticationDefaults.AuthenticationType);
 
@@ -328,7 +329,9 @@ namespace project_ls.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Username, FirstName = model.Firstname, LastName = model.Lastname, Email = model.Email };
+            var user = new ApplicationUser() { UserName = model.Username, Email = model.Email };
+
+
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -336,8 +339,25 @@ namespace project_ls.Controllers
             {
                 return GetErrorResult(result);
             }
+            else
+            {
+                Data.librarydbDataContext db = new Data.librarydbDataContext();
 
-            return Ok();
+                Data.MstUser mstUser = new Data.MstUser
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Password = model.Password,
+                    UserTypeId = model.UserTypeId,
+                    AspNetUserId = user.Id
+                };
+
+                db.MstUsers.InsertOnSubmit(mstUser);
+                db.SubmitChanges();
+
+                return Ok();
+
+            }
         }
 
         // POST api/Account/RegisterExternal
@@ -360,6 +380,7 @@ namespace project_ls.Controllers
             var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
 
             IdentityResult result = await UserManager.CreateAsync(user);
+
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
@@ -368,7 +389,7 @@ namespace project_ls.Controllers
             result = await UserManager.AddLoginAsync(user.Id, info.Login);
             if (!result.Succeeded)
             {
-                return GetErrorResult(result); 
+                return GetErrorResult(result);
             }
             return Ok();
         }

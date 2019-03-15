@@ -23,22 +23,34 @@ namespace project_ls.ApiControllers
         {
             try
             {
-                Data.MstLibraryBook newLibraryBook = new Data.MstLibraryBook
+                var bookNumber = from d in db.MstLibraryBooks
+                                 where d.BookNumber == objLibraryBook.BookNumber
+                                 select d.BookNumber;
+
+                if (bookNumber.Any())
                 {
-                    BookNumber = objLibraryBook.BookNumber,
-                    Title = objLibraryBook.Title,
-                    Author = objLibraryBook.Author,
-                    EditionNumber = objLibraryBook.EditionNumber,
-                    PlaceOfPublication = objLibraryBook.PlaceOfPublication,
-                    CopyRightDate = Convert.ToDateTime(objLibraryBook.CopyRightDate),
-                    ISBN = objLibraryBook.ISBN,
-                    UserId = objLibraryBook.UserId
-                };
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Book No. already taken!");
+                }
+                else
+                {
+                    Data.MstLibraryBook newLibraryBook = new Data.MstLibraryBook
+                    {
+                        BookNumber = objLibraryBook.BookNumber,
+                        Title = objLibraryBook.Title,
+                        Author = objLibraryBook.Author,
+                        EditionNumber = objLibraryBook.EditionNumber,
+                        PlaceOfPublication = objLibraryBook.PlaceOfPublication,
+                        CopyRightDate = Convert.ToDateTime(objLibraryBook.CopyRightDate),
+                        ISBN = objLibraryBook.ISBN,
+                        UserId = objLibraryBook.UserId
+                    };
 
-                db.MstLibraryBooks.InsertOnSubmit(newLibraryBook);
-                db.SubmitChanges();
+                    db.MstLibraryBooks.InsertOnSubmit(newLibraryBook);
+                    db.SubmitChanges();
 
-                return Request.CreateResponse(HttpStatusCode.OK);
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+
             }
             catch (Exception e)
             {
@@ -53,19 +65,20 @@ namespace project_ls.ApiControllers
         [HttpGet, Route("api/library/book/list")]
         public List<Entities.MtsLibraryBook> LibraryBookList()
         {
+
             var bookList = from d in db.MstLibraryBooks
-                        select new Entities.MtsLibraryBook
-                        {
-                            Id = d.Id,
-                            BookNumber = d.BookNumber,
-                            Title = d.Title,
-                            Author = d.Author,
-                            EditionNumber = d.EditionNumber,
-                            PlaceOfPublication = d.PlaceOfPublication,
-                            CopyRightDate = d.CopyRightDate.ToShortDateString(),
-                            ISBN = d.ISBN,
-                            UserId = d.UserId
-                        };
+                           select new Entities.MtsLibraryBook
+                           {
+                               Id = d.Id,
+                               BookNumber = d.BookNumber,
+                               Title = d.Title,
+                               Author = d.Author,
+                               EditionNumber = d.EditionNumber,
+                               PlaceOfPublication = d.PlaceOfPublication,
+                               CopyRightDate = d.CopyRightDate.ToShortDateString(),
+                               ISBN = d.ISBN,
+                               UserId = d.UserId
+                           };
 
             return bookList.ToList();
         }
@@ -77,19 +90,19 @@ namespace project_ls.ApiControllers
         public List<Entities.MtsLibraryBook> LibraryBookList(String id)
         {
             var book = from d in db.MstLibraryBooks
-                        where d.Id == Convert.ToInt32(id)
-                        select new Entities.MtsLibraryBook
-                        {
-                            Id = d.Id,
-                            BookNumber = d.BookNumber,
-                            Title = d.Title,
-                            Author = d.Author,
-                            EditionNumber = d.EditionNumber,
-                            PlaceOfPublication = d.PlaceOfPublication,
-                            CopyRightDate = d.CopyRightDate.ToShortDateString(),
-                            ISBN = d.ISBN,
-                            UserId = d.UserId
-                        };
+                       where d.Id == Convert.ToInt32(id)
+                       select new Entities.MtsLibraryBook
+                       {
+                           Id = d.Id,
+                           BookNumber = d.BookNumber,
+                           Title = d.Title,
+                           Author = d.Author,
+                           EditionNumber = d.EditionNumber,
+                           PlaceOfPublication = d.PlaceOfPublication,
+                           CopyRightDate = d.CopyRightDate.ToShortDateString(),
+                           ISBN = d.ISBN,
+                           UserId = d.UserId
+                       };
 
             return book.ToList();
         }
@@ -97,54 +110,42 @@ namespace project_ls.ApiControllers
         // =============
         // Update - Book
         // =============
-        [HttpPut, Route("update/{id}/{bookId}")]
-        public HttpResponseMessage UpdateBook(String id, String bookId, Entities.MtsLibraryBook objUpdateBook)
+        [HttpPut, Route("api/library/book/update/{id}")]
+        public HttpResponseMessage UpdateBook(Entities.MtsLibraryBook objUpdateBook, String id)
         {
             try
             {
-                var currentUserId = from d in db.MstUsers
-                                  where d.Id == Convert.ToInt32(id) && d.UserTypeId == 1
-                                  select d.Id;
+                var currentBook = from d in db.MstLibraryBooks
+                                  where d.Id == Convert.ToInt32(id)
+                                  select d;
 
-                var userIdCurrent = currentUserId.FirstOrDefault();
-
-                if (currentUserId.Any())
+                if (currentBook.Any())
                 {
-                    var currentBook = from d in db.MstLibraryBooks
-                                        where d.Id == Convert.ToInt32(bookId) 
-                                        select d;
 
-                    if (currentBook.Any()) {
-
-                        var currentBookId = from d in db.MstLibraryBooks
-                                        where d.Id == Convert.ToInt32(bookId)
+                    var currentBookId = from d in db.MstLibraryBooks
+                                        where d.Id == Convert.ToInt32(id)
                                         select d.Id;
 
-                        var bookIdCurrent = currentBookId.FirstOrDefault();
+                    var bookIdCurrent = currentBookId.FirstOrDefault();
 
-                        var updateBook = currentBook.FirstOrDefault();
-                        updateBook.Id = bookIdCurrent;
-                        updateBook.BookNumber = objUpdateBook.BookNumber;
-                        updateBook.Title = objUpdateBook.Title;
-                        updateBook.Author = objUpdateBook.Author;
-                        updateBook.EditionNumber = objUpdateBook.EditionNumber;
-                        updateBook.CopyRightDate = Convert.ToDateTime(objUpdateBook.CopyRightDate);
-                        updateBook.ISBN = objUpdateBook.ISBN;
-                        updateBook.UserId = userIdCurrent;
+                    var updateBook = currentBook.FirstOrDefault();
+                    updateBook.Id = bookIdCurrent;
+                    updateBook.BookNumber = objUpdateBook.BookNumber;
+                    updateBook.Title = objUpdateBook.Title;
+                    updateBook.Author = objUpdateBook.Author;
+                    updateBook.EditionNumber = objUpdateBook.EditionNumber;
+                    updateBook.CopyRightDate = Convert.ToDateTime(objUpdateBook.CopyRightDate);
+                    updateBook.ISBN = objUpdateBook.ISBN;
 
-                        db.SubmitChanges();
+                    db.SubmitChanges();
 
-                        return Request.CreateResponse(HttpStatusCode.OK);
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(HttpStatusCode.NotFound);
-                    }
+                    return Request.CreateResponse(HttpStatusCode.OK);
                 }
                 else
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
+
             }
             catch (Exception e)
             {

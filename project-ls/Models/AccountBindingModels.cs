@@ -39,16 +39,20 @@ namespace project_ls.Models
         public string Username { get; set; }
 
         [Required]
-        [Display(Name = "Firstname")]
-        public string Firstname { get; set; }
-
-        [Required]
-        [Display(Name = "Lastname")]
-        public string Lastname { get; set; }
-
-        [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "FirstName")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "UserTypeId")]
+        public Int32 UserTypeId { get; set; }
+
+        [Required]
+        [Display(Name = "LastName")]
+        public string LastName { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
@@ -67,9 +71,6 @@ namespace project_ls.Models
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
-
-       
-
     }
 
     public class RemoveLoginBindingModel

@@ -254,6 +254,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>librarydb.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Entities\AspNetUsers.cs" />
     <Compile Include="Entities\MstUser.cs" />
     <Compile Include="Entities\MstUserType.cs" />
     <Compile Include="Entities\MtsLibraryBooks.cs" />

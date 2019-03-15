@@ -23,15 +23,15 @@ namespace project_ls.ApiControllers
         {
             try
             {
+
                 Data.MstUser mstUser = new Data.MstUser
                 {
-                    UserName = objMstUser.UserName,
                     FirstName = objMstUser.FirstName,
                     LastName = objMstUser.LastName,
-                    Email = objMstUser.Email,
                     Password = objMstUser.Password,
-                    UserTypeId = objMstUser.UserTypeId
+                    UserTypeId = objMstUser.UserTypeId,
                 };
+
                 db.MstUsers.InsertOnSubmit(mstUser);
                 db.SubmitChanges();
 
@@ -62,23 +62,31 @@ namespace project_ls.ApiControllers
         // ===========
         // List - User
         // ===========
-        [HttpGet, Route("api/user/list")]
+        [HttpGet, Route("api/library/user/list")]
         public List<Entities.MstUser> UserList()
         {
-            var userList = from d in db.MstUsers
-                       select new Entities.MstUser
-                       {
-                           Id = d.Id,
-                           UserName = d.UserName,
-                           FirstName = d.FirstName,
-                           LastName = d.LastName,
-                           Email = d.Email,
-                           Password = d.Password,
-                           UserTypeId = d.UserTypeId
-                       };
 
-            return userList.ToList();
+            var result = from d in db.AspNetUsers
+                         join b in db.MstUsers on d.Id equals b.AspNetUserId
+                         select new Entities.MstUser
+                         {
+                             UserName = d.UserName,
+                             FirstName = b.FirstName,
+                             LastName = b.LastName,
+                             Email = d.Email,
+                             Password = b.Password,
+                             UserTypeId = b.UserTypeId,
+                         };
+
+            return result.ToList();
+
         }
+
+
+
+
+
+
 
         // =============
         // Detail - User
@@ -91,16 +99,19 @@ namespace project_ls.ApiControllers
                        select new Entities.MstUser
                        {
                            Id = d.Id,
-                           UserName = d.UserName,
                            FirstName = d.FirstName,
                            LastName = d.LastName,
-                           Email = d.Email,
                            Password = d.Password,
                            UserTypeId = d.UserTypeId
                        };
 
             return user.ToList();
+
+
         }
+
+
+
 
         // =============
         // Update - User
@@ -124,10 +135,8 @@ namespace project_ls.ApiControllers
 
                     var updateUser = currentUser.FirstOrDefault();
                     updateUser.Id = userId;
-                    updateUser.UserName = objUpdateUser.UserName;
                     updateUser.FirstName = objUpdateUser.FirstName;
                     updateUser.LastName = objUpdateUser.LastName;
-                    updateUser.Email = objUpdateUser.Email;
                     updateUser.Password = objUpdateUser.Password;
                     updateUser.UserTypeId = objUpdateUser.UserTypeId;
 

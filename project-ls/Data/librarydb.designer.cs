@@ -800,10 +800,6 @@ namespace project_ls.Data
 		
 		private string _UserName;
 		
-		private string _FirstName;
-		
-		private string _LastName;
-		
 		private EntitySet<AspNetUserClaim> _AspNetUserClaims;
 		
 		private EntitySet<AspNetUserLogin> _AspNetUserLogins;
@@ -815,6 +811,8 @@ namespace project_ls.Data
 		private EntitySet<MstTransaction> _MstTransactions1;
 		
 		private EntitySet<MstTransaction> _MstTransactions2;
+		
+		private EntitySet<MstUser> _MstUsers;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -844,10 +842,6 @@ namespace project_ls.Data
     partial void OnAccessFailedCountChanged();
     partial void OnUserNameChanging(string value);
     partial void OnUserNameChanged();
-    partial void OnFirstNameChanging(string value);
-    partial void OnFirstNameChanged();
-    partial void OnLastNameChanging(string value);
-    partial void OnLastNameChanged();
     #endregion
 		
 		public AspNetUser()
@@ -858,6 +852,7 @@ namespace project_ls.Data
 			this._MstTransactions = new EntitySet<MstTransaction>(new Action<MstTransaction>(this.attach_MstTransactions), new Action<MstTransaction>(this.detach_MstTransactions));
 			this._MstTransactions1 = new EntitySet<MstTransaction>(new Action<MstTransaction>(this.attach_MstTransactions1), new Action<MstTransaction>(this.detach_MstTransactions1));
 			this._MstTransactions2 = new EntitySet<MstTransaction>(new Action<MstTransaction>(this.attach_MstTransactions2), new Action<MstTransaction>(this.detach_MstTransactions2));
+			this._MstUsers = new EntitySet<MstUser>(new Action<MstUser>(this.attach_MstUsers), new Action<MstUser>(this.detach_MstUsers));
 			OnCreated();
 		}
 		
@@ -1101,46 +1096,6 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
-		public string FirstName
-		{
-			get
-			{
-				return this._FirstName;
-			}
-			set
-			{
-				if ((this._FirstName != value))
-				{
-					this.OnFirstNameChanging(value);
-					this.SendPropertyChanging();
-					this._FirstName = value;
-					this.SendPropertyChanged("FirstName");
-					this.OnFirstNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastName", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
-		public string LastName
-		{
-			get
-			{
-				return this._LastName;
-			}
-			set
-			{
-				if ((this._LastName != value))
-				{
-					this.OnLastNameChanging(value);
-					this.SendPropertyChanging();
-					this._LastName = value;
-					this.SendPropertyChanged("LastName");
-					this.OnLastNameChanged();
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_AspNetUserClaim", Storage="_AspNetUserClaims", ThisKey="Id", OtherKey="UserId")]
 		public EntitySet<AspNetUserClaim> AspNetUserClaims
 		{
@@ -1216,6 +1171,19 @@ namespace project_ls.Data
 			set
 			{
 				this._MstTransactions2.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_MstUser", Storage="_MstUsers", ThisKey="Id", OtherKey="AspNetUserId")]
+		public EntitySet<MstUser> MstUsers
+		{
+			get
+			{
+				return this._MstUsers;
+			}
+			set
+			{
+				this._MstUsers.Assign(value);
 			}
 		}
 		
@@ -1309,6 +1277,18 @@ namespace project_ls.Data
 		{
 			this.SendPropertyChanging();
 			entity.AspNetUser2 = null;
+		}
+		
+		private void attach_MstUsers(MstUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetUser = this;
+		}
+		
+		private void detach_MstUsers(MstUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetUser = null;
 		}
 	}
 	
@@ -1448,7 +1428,7 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EditionNumber", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EditionNumber", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
 		public string EditionNumber
 		{
 			get
@@ -2009,19 +1989,19 @@ namespace project_ls.Data
 		
 		private int _Id;
 		
-		private string _UserName;
-		
 		private string _FirstName;
 		
 		private string _LastName;
-		
-		private string _Email;
 		
 		private string _Password;
 		
 		private int _UserTypeId;
 		
+		private string _AspNetUserId;
+		
 		private EntitySet<MstLibraryBook> _MstLibraryBooks;
+		
+		private EntityRef<AspNetUser> _AspNetUser;
 		
 		private EntityRef<MstUserType> _MstUserType;
 		
@@ -2031,23 +2011,22 @@ namespace project_ls.Data
     partial void OnCreated();
     partial void OnIdChanging(int value);
     partial void OnIdChanged();
-    partial void OnUserNameChanging(string value);
-    partial void OnUserNameChanged();
     partial void OnFirstNameChanging(string value);
     partial void OnFirstNameChanged();
     partial void OnLastNameChanging(string value);
     partial void OnLastNameChanged();
-    partial void OnEmailChanging(string value);
-    partial void OnEmailChanged();
     partial void OnPasswordChanging(string value);
     partial void OnPasswordChanged();
     partial void OnUserTypeIdChanging(int value);
     partial void OnUserTypeIdChanged();
+    partial void OnAspNetUserIdChanging(string value);
+    partial void OnAspNetUserIdChanged();
     #endregion
 		
 		public MstUser()
 		{
 			this._MstLibraryBooks = new EntitySet<MstLibraryBook>(new Action<MstLibraryBook>(this.attach_MstLibraryBooks), new Action<MstLibraryBook>(this.detach_MstLibraryBooks));
+			this._AspNetUser = default(EntityRef<AspNetUser>);
 			this._MstUserType = default(EntityRef<MstUserType>);
 			OnCreated();
 		}
@@ -2068,26 +2047,6 @@ namespace project_ls.Data
 					this._Id = value;
 					this.SendPropertyChanged("Id");
 					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
-		public string UserName
-		{
-			get
-			{
-				return this._UserName;
-			}
-			set
-			{
-				if ((this._UserName != value))
-				{
-					this.OnUserNameChanging(value);
-					this.SendPropertyChanging();
-					this._UserName = value;
-					this.SendPropertyChanged("UserName");
-					this.OnUserNameChanged();
 				}
 			}
 		}
@@ -2128,26 +2087,6 @@ namespace project_ls.Data
 					this._LastName = value;
 					this.SendPropertyChanged("LastName");
 					this.OnLastNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Email", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
-		public string Email
-		{
-			get
-			{
-				return this._Email;
-			}
-			set
-			{
-				if ((this._Email != value))
-				{
-					this.OnEmailChanging(value);
-					this.SendPropertyChanging();
-					this._Email = value;
-					this.SendPropertyChanged("Email");
-					this.OnEmailChanged();
 				}
 			}
 		}
@@ -2196,6 +2135,30 @@ namespace project_ls.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AspNetUserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string AspNetUserId
+		{
+			get
+			{
+				return this._AspNetUserId;
+			}
+			set
+			{
+				if ((this._AspNetUserId != value))
+				{
+					if (this._AspNetUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAspNetUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._AspNetUserId = value;
+					this.SendPropertyChanged("AspNetUserId");
+					this.OnAspNetUserIdChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstLibraryBook", Storage="_MstLibraryBooks", ThisKey="Id", OtherKey="UserId")]
 		public EntitySet<MstLibraryBook> MstLibraryBooks
 		{
@@ -2206,6 +2169,40 @@ namespace project_ls.Data
 			set
 			{
 				this._MstLibraryBooks.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_MstUser", Storage="_AspNetUser", ThisKey="AspNetUserId", OtherKey="Id", IsForeignKey=true)]
+		public AspNetUser AspNetUser
+		{
+			get
+			{
+				return this._AspNetUser.Entity;
+			}
+			set
+			{
+				AspNetUser previousValue = this._AspNetUser.Entity;
+				if (((previousValue != value) 
+							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._AspNetUser.Entity = null;
+						previousValue.MstUsers.Remove(this);
+					}
+					this._AspNetUser.Entity = value;
+					if ((value != null))
+					{
+						value.MstUsers.Add(this);
+						this._AspNetUserId = value.Id;
+					}
+					else
+					{
+						this._AspNetUserId = default(string);
+					}
+					this.SendPropertyChanged("AspNetUser");
+				}
 			}
 		}
 		
