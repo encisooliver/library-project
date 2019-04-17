@@ -47,8 +47,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Owin.Cors, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Cors.4.0.0\lib\net451\Microsoft.Owin.Cors.dll</HintPath>
+    <Reference Include="Microsoft.Owin, Version=4.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Cors, Version=4.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Cors.4.0.1\lib\net45\Microsoft.Owin.Cors.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -147,9 +150,6 @@
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin">
-      <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Owin.Host.SystemWeb">
       <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.0.0\lib\net451\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
     </Reference>
@@ -211,7 +211,10 @@
   <ItemGroup>
     <Compile Include="ApiControllers\ApiAccountController.cs" />
     <Compile Include="ApiControllers\ApiMstLibraryBooksController.cs" />
+    <Compile Include="ApiControllers\ApiMstLibraryCardController.cs" />
     <Compile Include="ApiControllers\ApiMstUserController.cs" />
+    <Compile Include="ApiControllers\ApiMstBorrowerController.cs" />
+    <Compile Include="ApiControllers\ApiTrnBorrowController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -255,9 +258,13 @@
       <DependentUpon>librarydb.dbml</DependentUpon>
     </Compile>
     <Compile Include="Entities\AspNetUsers.cs" />
+    <Compile Include="Entities\MstBorrower.cs" />
+    <Compile Include="Entities\MstLibraryCard.cs" />
     <Compile Include="Entities\MstUser.cs" />
     <Compile Include="Entities\MstUserType.cs" />
     <Compile Include="Entities\MtsLibraryBooks.cs" />
+    <Compile Include="Entities\TrnBorrow.cs" />
+    <Compile Include="Entities\TrnBorrowBook.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

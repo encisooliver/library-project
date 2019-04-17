@@ -8,9 +8,9 @@ using Microsoft.AspNet.Identity;
 using System.Diagnostics;
 using System.Reflection;
 
-
 namespace project_ls.ApiControllers
 {
+    [Authorize, RoutePrefix("api/Library/Book")]
     public class ApiMstLibraryBooksController : ApiController
     {
         private Data.librarydbDataContext db = new Data.librarydbDataContext();
@@ -18,37 +18,61 @@ namespace project_ls.ApiControllers
         // ===========
         // Post - Book
         // ===========
-        [HttpPost, Route("api/library/book/add")]
+        [HttpPost, Route("Add")]
         public HttpResponseMessage addLibraryBook(Entities.MtsLibraryBook objLibraryBook)
         {
             try
             {
-                var bookNumber = from d in db.MstLibraryBooks
-                                 where d.BookNumber == objLibraryBook.BookNumber
-                                 select d.BookNumber;
+                var currentUserType = from d in db.MstUsers
+                                      where d.AspNetUserId == User.Identity.GetUserId()
+                                      select d.MstUserType.UserType;
 
-                if (bookNumber.Any())
+                var userType = currentUserType.FirstOrDefault();
+
+                if ( userType == "Admin" )
                 {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Book No. already taken!");
+                    var bookNumber = from d in db.MstLibraryBooks
+                                     where d.BookNumber == objLibraryBook.BookNumber
+                                     select d.BookNumber;
+
+                    if (bookNumber.Any())
+                    {
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Book No. already taken!");
+                    }
+                    else
+                    {
+                        var currentUser = from d in db.MstUsers
+                                          where d.AspNetUserId == User.Identity.GetUserId()
+                                          select d;
+
+                        Data.MstLibraryBook newLibraryBook = new Data.MstLibraryBook
+                        {
+                            BookNumber = objLibraryBook.BookNumber,
+                            Title = objLibraryBook.Title,
+                            Author = objLibraryBook.Author,
+                            EditionNumber = objLibraryBook.EditionNumber,
+                            PlaceOfPublication = objLibraryBook.PlaceOfPublication,
+                            CopyRightDate = Convert.ToDateTime(objLibraryBook.CopyRightDate),
+                            ISBN = objLibraryBook.ISBN,
+                            CreatedByUserId = currentUser.FirstOrDefault().Id,
+                            CreatedBy = currentUser.FirstOrDefault().FirstName,
+                            CreatedDate = DateTime.Now,
+                            UpdatedByUserId = currentUser.FirstOrDefault().Id,
+                            UpdatedBy = currentUser.FirstOrDefault().FirstName,
+                            UpdatedDate = DateTime.Now,
+
+
+                        };
+
+                        db.MstLibraryBooks.InsertOnSubmit(newLibraryBook);
+                        db.SubmitChanges();
+
+                        return Request.CreateResponse(HttpStatusCode.OK);
+                    }
                 }
                 else
                 {
-                    Data.MstLibraryBook newLibraryBook = new Data.MstLibraryBook
-                    {
-                        BookNumber = objLibraryBook.BookNumber,
-                        Title = objLibraryBook.Title,
-                        Author = objLibraryBook.Author,
-                        EditionNumber = objLibraryBook.EditionNumber,
-                        PlaceOfPublication = objLibraryBook.PlaceOfPublication,
-                        CopyRightDate = Convert.ToDateTime(objLibraryBook.CopyRightDate),
-                        ISBN = objLibraryBook.ISBN,
-                        UserId = objLibraryBook.UserId
-                    };
-
-                    db.MstLibraryBooks.InsertOnSubmit(newLibraryBook);
-                    db.SubmitChanges();
-
-                    return Request.CreateResponse(HttpStatusCode.OK);
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You're not authorize!");
                 }
 
             }
@@ -62,7 +86,7 @@ namespace project_ls.ApiControllers
         // ===========
         // List - Book
         // ===========
-        [HttpGet, Route("api/library/book/list")]
+        [HttpGet, Route("List")]
         public List<Entities.MtsLibraryBook> LibraryBookList()
         {
 
@@ -77,40 +101,22 @@ namespace project_ls.ApiControllers
                                PlaceOfPublication = d.PlaceOfPublication,
                                CopyRightDate = d.CopyRightDate.ToShortDateString(),
                                ISBN = d.ISBN,
-                               UserId = d.UserId
+                               CreatedByUserId = d.CreatedByUserId,
+                               CreatedBy = d.CreatedBy,
+                               CreatedDate = d.CreatedDate.ToLongDateString(),
+                               UpdatedByUserId = d.UpdatedByUserId,
+                               UpdatedBy = d.UpdatedBy,
+                               UpdatedDate = d.UpdatedDate.ToLongDateString()
                            };
 
             return bookList.ToList();
         }
 
-        // =============
-        // Detail - Book
-        // =============
-        [HttpGet, Route("api/library/book/{id}")]
-        public List<Entities.MtsLibraryBook> LibraryBookList(String id)
-        {
-            var book = from d in db.MstLibraryBooks
-                       where d.Id == Convert.ToInt32(id)
-                       select new Entities.MtsLibraryBook
-                       {
-                           Id = d.Id,
-                           BookNumber = d.BookNumber,
-                           Title = d.Title,
-                           Author = d.Author,
-                           EditionNumber = d.EditionNumber,
-                           PlaceOfPublication = d.PlaceOfPublication,
-                           CopyRightDate = d.CopyRightDate.ToShortDateString(),
-                           ISBN = d.ISBN,
-                           UserId = d.UserId
-                       };
-
-            return book.ToList();
-        }
 
         // =============
         // Update - Book
         // =============
-        [HttpPut, Route("api/library/book/update/{id}")]
+        [HttpPut, Route("Update/{id}")]
         public HttpResponseMessage UpdateBook(Entities.MtsLibraryBook objUpdateBook, String id)
         {
             try
@@ -118,24 +124,23 @@ namespace project_ls.ApiControllers
                 var currentBook = from d in db.MstLibraryBooks
                                   where d.Id == Convert.ToInt32(id)
                                   select d;
-
+                 
                 if (currentBook.Any())
                 {
-
-                    var currentBookId = from d in db.MstLibraryBooks
-                                        where d.Id == Convert.ToInt32(id)
-                                        select d.Id;
-
-                    var bookIdCurrent = currentBookId.FirstOrDefault();
+                    var currentUser = from d in db.MstUsers
+                                      where d.AspNetUserId == User.Identity.GetUserId()
+                                      select d;
 
                     var updateBook = currentBook.FirstOrDefault();
-                    updateBook.Id = bookIdCurrent;
                     updateBook.BookNumber = objUpdateBook.BookNumber;
                     updateBook.Title = objUpdateBook.Title;
                     updateBook.Author = objUpdateBook.Author;
                     updateBook.EditionNumber = objUpdateBook.EditionNumber;
                     updateBook.CopyRightDate = Convert.ToDateTime(objUpdateBook.CopyRightDate);
                     updateBook.ISBN = objUpdateBook.ISBN;
+                    updateBook.UpdatedByUserId = currentUser.FirstOrDefault().Id;
+                    updateBook.UpdatedBy = currentUser.FirstOrDefault().FirstName;
+                    updateBook.UpdatedDate = DateTime.Now;
 
                     db.SubmitChanges();
 
@@ -157,7 +162,7 @@ namespace project_ls.ApiControllers
         // =============
         // Delete - Book
         // =============
-        [HttpDelete, Route("api/library/book/delete/{id}")]
+        [HttpDelete, Route("Delete/{id}")]
         public HttpResponseMessage DeleteLibraryBook(String id)
         {
             try

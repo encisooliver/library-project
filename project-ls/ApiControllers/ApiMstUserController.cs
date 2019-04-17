@@ -7,10 +7,9 @@ using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using System.Diagnostics;
 
-
-
 namespace project_ls.ApiControllers
 {
+    [Authorize, RoutePrefix("api/Library/User")]
     public class ApiMstUserController : ApiController
     {
         private Data.librarydbDataContext db = new Data.librarydbDataContext();
@@ -18,7 +17,7 @@ namespace project_ls.ApiControllers
         // ==========
         // Add - User
         // ==========
-        [HttpPost, Route("api/user/add")]
+        [HttpPost, Route("Add")]
         public HttpResponseMessage AddUser(Entities.MstUser objMstUser)
         {
             try
@@ -46,7 +45,7 @@ namespace project_ls.ApiControllers
         // ===============
         // List UserTypeId
         // ===============
-        [HttpGet, Route("api/user/UserType")]
+        [HttpGet, Route("UserType")]
         public List<Entities.MstUserType> UserTypeList()
         {
             var userType = from d in db.MstUserTypes
@@ -62,7 +61,7 @@ namespace project_ls.ApiControllers
         // ===========
         // List - User
         // ===========
-        [HttpGet, Route("api/library/user/list")]
+        [HttpGet, Route("List")]
         public List<Entities.MstUser> UserList()
         {
 
@@ -70,6 +69,7 @@ namespace project_ls.ApiControllers
                          join b in db.MstUsers on d.Id equals b.AspNetUserId
                          select new Entities.MstUser
                          {
+                             Id = b.Id,
                              UserName = d.UserName,
                              FirstName = b.FirstName,
                              LastName = b.LastName,
@@ -83,71 +83,56 @@ namespace project_ls.ApiControllers
         }
 
 
-
-
-
-
-
-        // =============
-        // Detail - User
-        // =============
-        [HttpGet, Route("api/user/detail/{id}")]
-        public List<Entities.MstUser> IndividualUser(String id)
-        {
-            var user = from d in db.MstUsers
-                       where d.Id == Convert.ToInt32(id)
-                       select new Entities.MstUser
-                       {
-                           Id = d.Id,
-                           FirstName = d.FirstName,
-                           LastName = d.LastName,
-                           Password = d.Password,
-                           UserTypeId = d.UserTypeId
-                       };
-
-            return user.ToList();
-
-
-        }
-
-
-
-
         // =============
         // Update - User
         // =============
-        [HttpPut, Route("api/user/update/{id}")]
+        [HttpPut, Route("Update/{id}")]
         public HttpResponseMessage UpdateUser(Entities.MstUser objUpdateUser, String id)
         {
             try
             {
-                var currentUser = from d in db.MstUsers
-                                  where d.Id == Convert.ToInt32(id)
-                                  select d;
+                var UserTypeId = from d in db.MstUsers
+                                 where d.AspNetUserId == User.Identity.GetUserId()
+                                 select d.UserTypeId;
 
-                if (currentUser.Any())
+                var userId = User.Identity.GetUserId();
+
+                var currentUserType = UserTypeId.FirstOrDefault();
+                
+                if (currentUserType == 1) 
                 {
-                    var currentUserId = from d in db.MstUsers
-                                        where d.Id == Convert.ToInt32(id)
-                                        select d.Id;
 
-                    var userId = currentUserId.FirstOrDefault();
+                    var isUserDetailExist = from d in db.MstUsers
+                                            where d.Id == Convert.ToInt32(id)
+                                            select d;
 
-                    var updateUser = currentUser.FirstOrDefault();
-                    updateUser.Id = userId;
-                    updateUser.FirstName = objUpdateUser.FirstName;
-                    updateUser.LastName = objUpdateUser.LastName;
-                    updateUser.Password = objUpdateUser.Password;
-                    updateUser.UserTypeId = objUpdateUser.UserTypeId;
+                    if (isUserDetailExist.Any())
+                    {
+                        var currentUserDetail = from d in db.MstUsers
+                                                where d.Id == Convert.ToInt32(id)
+                                                select d;
 
-                    db.SubmitChanges();
+                        var updateUser = currentUserDetail.FirstOrDefault();
+                        updateUser.FirstName = objUpdateUser.FirstName;
+                        updateUser.LastName = objUpdateUser.LastName;
+                        updateUser.UserTypeId = objUpdateUser.UserTypeId;
 
-                    return Request.CreateResponse(HttpStatusCode.OK);
+                        db.SubmitChanges();
+
+                        return Request.CreateResponse(HttpStatusCode.OK);
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.NotFound);
+                    }
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Unauthorized");
+                    
                 }
+
+
             }
             catch (Exception e)
             {
@@ -159,7 +144,7 @@ namespace project_ls.ApiControllers
         // =============
         // Delete - User
         // =============
-        [HttpDelete, Route("api/user/delete/{id}")]
+        [HttpDelete, Route("Delete/{id}")]
         public HttpResponseMessage DeleteUser(String id)
         {
             try
