@@ -6,13 +6,21 @@
       <Column Name="Name" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
-  <Table Name="dbo.TrnReturnBook" Member="TrnReturnBooks">
-    <Type Name="TrnReturnBook">
+  <Table Name="dbo.TrnReturn" Member="TrnReturns">
+    <Type Name="TrnReturn">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="ReturnId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="BookId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Quantity" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="TrnReturn_TrnReturnBook" Member="TrnReturn" ThisKey="ReturnId" OtherKey="Id" Type="TrnReturn" IsForeignKey="true" />
+      <Column Name="ReturnNumber" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ReturnDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ManualReturnNumber" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BorrowerId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PreparedByUser" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedByUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdatedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="UpdatedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="TrnReturn_TrnReturnBook" Member="TrnReturnBooks" ThisKey="Id" OtherKey="ReturnId" Type="TrnReturnBook" />
+      <Association Name="TrnReturn_TrnReturnBook1" Member="TrnReturnBooks1" ThisKey="Id" OtherKey="ReturnId" Type="TrnReturnBook" />
+      <Association Name="MstBorrower_TrnReturn" Member="MstBorrower" ThisKey="BorrowerId" OtherKey="Id" Type="MstBorrower" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.AspNetUserClaims" Member="AspNetUserClaims">
@@ -73,9 +81,9 @@
       <Column Name="UpdatedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="BorrowerTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="LibraryCardId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="MstBorrower_TrnReturn" Member="TrnReturns" ThisKey="Id" OtherKey="BorrowerId" Type="TrnReturn" />
       <Association Name="MstBorrower_MstLibaryCard" Member="MstLibaryCards" ThisKey="Id" OtherKey="BorrowerId" Type="MstLibaryCard" />
       <Association Name="MstBorrower_TrnBorrow" Member="TrnBorrows" ThisKey="Id" OtherKey="BorrowerId" Type="TrnBorrow" />
-      <Association Name="MstBorrower_TrnReturn" Member="TrnReturns" ThisKey="Id" OtherKey="BorrowerId" Type="TrnReturn" />
     </Type>
   </Table>
   <Table Name="dbo.MstLibaryCard" Member="MstLibaryCards">
@@ -111,6 +119,7 @@
       <Column Name="UpdatedByUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedBy" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="MstLibraryBook_TrnReturnBook" Member="TrnReturnBooks" ThisKey="Id" OtherKey="BookId" Type="TrnReturnBook" />
     </Type>
   </Table>
   <Table Name="dbo.MstUser" Member="MstUsers">
@@ -165,20 +174,15 @@
       <Association Name="TrnBorrow_TrnBorrowBook" Member="TrnBorrow" ThisKey="BorrowId" OtherKey="Id" Type="TrnBorrow" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.TrnReturn" Member="TrnReturns">
-    <Type Name="TrnReturn">
+  <Table Name="dbo.TrnReturnBook" Member="TrnReturnBooks">
+    <Type Name="TrnReturnBook">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="ReturnNumber" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ReturnDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="ManualReturnNumber" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="BorrowerId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="PreparedByUser" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
-      <Column Name="CreatedByUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="CreatedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="UpdatedByUserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="UpdatedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="TrnReturn_TrnReturnBook" Member="TrnReturnBooks" ThisKey="Id" OtherKey="ReturnId" Type="TrnReturnBook" />
-      <Association Name="MstBorrower_TrnReturn" Member="MstBorrower" ThisKey="BorrowerId" OtherKey="Id" Type="MstBorrower" IsForeignKey="true" />
+      <Column Name="ReturnId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BookId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="MstLibraryBook_TrnReturnBook" Member="MstLibraryBook" ThisKey="BookId" OtherKey="Id" Type="MstLibraryBook" IsForeignKey="true" />
+      <Association Name="TrnReturn_TrnReturnBook" Member="TrnReturn" ThisKey="ReturnId" OtherKey="Id" Type="TrnReturn" IsForeignKey="true" />
+      <Association Name="TrnReturn_TrnReturnBook1" Member="TrnReturn1" ThisKey="ReturnId" OtherKey="Id" Type="TrnReturn" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

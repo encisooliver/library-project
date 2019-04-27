@@ -33,9 +33,9 @@ namespace project_ls.Data
     partial void InsertAspNetRole(AspNetRole instance);
     partial void UpdateAspNetRole(AspNetRole instance);
     partial void DeleteAspNetRole(AspNetRole instance);
-    partial void InsertTrnReturnBook(TrnReturnBook instance);
-    partial void UpdateTrnReturnBook(TrnReturnBook instance);
-    partial void DeleteTrnReturnBook(TrnReturnBook instance);
+    partial void InsertTrnReturn(TrnReturn instance);
+    partial void UpdateTrnReturn(TrnReturn instance);
+    partial void DeleteTrnReturn(TrnReturn instance);
     partial void InsertAspNetUserClaim(AspNetUserClaim instance);
     partial void UpdateAspNetUserClaim(AspNetUserClaim instance);
     partial void DeleteAspNetUserClaim(AspNetUserClaim instance);
@@ -69,9 +69,9 @@ namespace project_ls.Data
     partial void InsertTrnBorrowBook(TrnBorrowBook instance);
     partial void UpdateTrnBorrowBook(TrnBorrowBook instance);
     partial void DeleteTrnBorrowBook(TrnBorrowBook instance);
-    partial void InsertTrnReturn(TrnReturn instance);
-    partial void UpdateTrnReturn(TrnReturn instance);
-    partial void DeleteTrnReturn(TrnReturn instance);
+    partial void InsertTrnReturnBook(TrnReturnBook instance);
+    partial void UpdateTrnReturnBook(TrnReturnBook instance);
+    partial void DeleteTrnReturnBook(TrnReturnBook instance);
     #endregion
 		
 		public librarydbDataContext() : 
@@ -112,11 +112,11 @@ namespace project_ls.Data
 			}
 		}
 		
-		public System.Data.Linq.Table<TrnReturnBook> TrnReturnBooks
+		public System.Data.Linq.Table<TrnReturn> TrnReturns
 		{
 			get
 			{
-				return this.GetTable<TrnReturnBook>();
+				return this.GetTable<TrnReturn>();
 			}
 		}
 		
@@ -216,11 +216,11 @@ namespace project_ls.Data
 			}
 		}
 		
-		public System.Data.Linq.Table<TrnReturn> TrnReturns
+		public System.Data.Linq.Table<TrnReturnBook> TrnReturnBooks
 		{
 			get
 			{
-				return this.GetTable<TrnReturn>();
+				return this.GetTable<TrnReturnBook>();
 			}
 		}
 	}
@@ -311,21 +311,37 @@ namespace project_ls.Data
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TrnReturnBook")]
-	public partial class TrnReturnBook : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TrnReturn")]
+	public partial class TrnReturn : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
 		private int _Id;
 		
-		private int _ReturnId;
+		private int _ReturnNumber;
 		
-		private int _BookId;
+		private System.DateTime _ReturnDate;
 		
-		private System.Nullable<int> _Quantity;
+		private System.Nullable<int> _ManualReturnNumber;
 		
-		private EntityRef<TrnReturn> _TrnReturn;
+		private int _BorrowerId;
+		
+		private string _PreparedByUser;
+		
+		private int _CreatedByUserId;
+		
+		private System.DateTime _CreatedDate;
+		
+		private System.Nullable<int> _UpdatedByUserId;
+		
+		private System.Nullable<System.DateTime> _UpdatedDate;
+		
+		private EntitySet<TrnReturnBook> _TrnReturnBooks;
+		
+		private EntitySet<TrnReturnBook> _TrnReturnBooks1;
+		
+		private EntityRef<MstBorrower> _MstBorrower;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -333,17 +349,31 @@ namespace project_ls.Data
     partial void OnCreated();
     partial void OnIdChanging(int value);
     partial void OnIdChanged();
-    partial void OnReturnIdChanging(int value);
-    partial void OnReturnIdChanged();
-    partial void OnBookIdChanging(int value);
-    partial void OnBookIdChanged();
-    partial void OnQuantityChanging(System.Nullable<int> value);
-    partial void OnQuantityChanged();
+    partial void OnReturnNumberChanging(int value);
+    partial void OnReturnNumberChanged();
+    partial void OnReturnDateChanging(System.DateTime value);
+    partial void OnReturnDateChanged();
+    partial void OnManualReturnNumberChanging(System.Nullable<int> value);
+    partial void OnManualReturnNumberChanged();
+    partial void OnBorrowerIdChanging(int value);
+    partial void OnBorrowerIdChanged();
+    partial void OnPreparedByUserChanging(string value);
+    partial void OnPreparedByUserChanged();
+    partial void OnCreatedByUserIdChanging(int value);
+    partial void OnCreatedByUserIdChanged();
+    partial void OnCreatedDateChanging(System.DateTime value);
+    partial void OnCreatedDateChanged();
+    partial void OnUpdatedByUserIdChanging(System.Nullable<int> value);
+    partial void OnUpdatedByUserIdChanged();
+    partial void OnUpdatedDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnUpdatedDateChanged();
     #endregion
 		
-		public TrnReturnBook()
+		public TrnReturn()
 		{
-			this._TrnReturn = default(EntityRef<TrnReturn>);
+			this._TrnReturnBooks = new EntitySet<TrnReturnBook>(new Action<TrnReturnBook>(this.attach_TrnReturnBooks), new Action<TrnReturnBook>(this.detach_TrnReturnBooks));
+			this._TrnReturnBooks1 = new EntitySet<TrnReturnBook>(new Action<TrnReturnBook>(this.attach_TrnReturnBooks1), new Action<TrnReturnBook>(this.detach_TrnReturnBooks1));
+			this._MstBorrower = default(EntityRef<MstBorrower>);
 			OnCreated();
 		}
 		
@@ -367,100 +397,246 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReturnId", DbType="Int NOT NULL")]
-		public int ReturnId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReturnNumber", DbType="Int NOT NULL")]
+		public int ReturnNumber
 		{
 			get
 			{
-				return this._ReturnId;
+				return this._ReturnNumber;
 			}
 			set
 			{
-				if ((this._ReturnId != value))
+				if ((this._ReturnNumber != value))
 				{
-					if (this._TrnReturn.HasLoadedOrAssignedValue)
+					this.OnReturnNumberChanging(value);
+					this.SendPropertyChanging();
+					this._ReturnNumber = value;
+					this.SendPropertyChanged("ReturnNumber");
+					this.OnReturnNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReturnDate", DbType="DateTime NOT NULL")]
+		public System.DateTime ReturnDate
+		{
+			get
+			{
+				return this._ReturnDate;
+			}
+			set
+			{
+				if ((this._ReturnDate != value))
+				{
+					this.OnReturnDateChanging(value);
+					this.SendPropertyChanging();
+					this._ReturnDate = value;
+					this.SendPropertyChanged("ReturnDate");
+					this.OnReturnDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ManualReturnNumber", DbType="Int")]
+		public System.Nullable<int> ManualReturnNumber
+		{
+			get
+			{
+				return this._ManualReturnNumber;
+			}
+			set
+			{
+				if ((this._ManualReturnNumber != value))
+				{
+					this.OnManualReturnNumberChanging(value);
+					this.SendPropertyChanging();
+					this._ManualReturnNumber = value;
+					this.SendPropertyChanged("ManualReturnNumber");
+					this.OnManualReturnNumberChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BorrowerId", DbType="Int NOT NULL")]
+		public int BorrowerId
+		{
+			get
+			{
+				return this._BorrowerId;
+			}
+			set
+			{
+				if ((this._BorrowerId != value))
+				{
+					if (this._MstBorrower.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
-					this.OnReturnIdChanging(value);
+					this.OnBorrowerIdChanging(value);
 					this.SendPropertyChanging();
-					this._ReturnId = value;
-					this.SendPropertyChanged("ReturnId");
-					this.OnReturnIdChanged();
+					this._BorrowerId = value;
+					this.SendPropertyChanged("BorrowerId");
+					this.OnBorrowerIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BookId", DbType="Int NOT NULL")]
-		public int BookId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PreparedByUser", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string PreparedByUser
 		{
 			get
 			{
-				return this._BookId;
+				return this._PreparedByUser;
 			}
 			set
 			{
-				if ((this._BookId != value))
+				if ((this._PreparedByUser != value))
 				{
-					this.OnBookIdChanging(value);
+					this.OnPreparedByUserChanging(value);
 					this.SendPropertyChanging();
-					this._BookId = value;
-					this.SendPropertyChanged("BookId");
-					this.OnBookIdChanged();
+					this._PreparedByUser = value;
+					this.SendPropertyChanged("PreparedByUser");
+					this.OnPreparedByUserChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Quantity", DbType="Int")]
-		public System.Nullable<int> Quantity
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedByUserId", DbType="Int NOT NULL")]
+		public int CreatedByUserId
 		{
 			get
 			{
-				return this._Quantity;
+				return this._CreatedByUserId;
 			}
 			set
 			{
-				if ((this._Quantity != value))
+				if ((this._CreatedByUserId != value))
 				{
-					this.OnQuantityChanging(value);
+					this.OnCreatedByUserIdChanging(value);
 					this.SendPropertyChanging();
-					this._Quantity = value;
-					this.SendPropertyChanged("Quantity");
-					this.OnQuantityChanged();
+					this._CreatedByUserId = value;
+					this.SendPropertyChanged("CreatedByUserId");
+					this.OnCreatedByUserIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrnReturn_TrnReturnBook", Storage="_TrnReturn", ThisKey="ReturnId", OtherKey="Id", IsForeignKey=true)]
-		public TrnReturn TrnReturn
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="DateTime NOT NULL")]
+		public System.DateTime CreatedDate
 		{
 			get
 			{
-				return this._TrnReturn.Entity;
+				return this._CreatedDate;
 			}
 			set
 			{
-				TrnReturn previousValue = this._TrnReturn.Entity;
+				if ((this._CreatedDate != value))
+				{
+					this.OnCreatedDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreatedDate = value;
+					this.SendPropertyChanged("CreatedDate");
+					this.OnCreatedDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UpdatedByUserId", DbType="Int")]
+		public System.Nullable<int> UpdatedByUserId
+		{
+			get
+			{
+				return this._UpdatedByUserId;
+			}
+			set
+			{
+				if ((this._UpdatedByUserId != value))
+				{
+					this.OnUpdatedByUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UpdatedByUserId = value;
+					this.SendPropertyChanged("UpdatedByUserId");
+					this.OnUpdatedByUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UpdatedDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> UpdatedDate
+		{
+			get
+			{
+				return this._UpdatedDate;
+			}
+			set
+			{
+				if ((this._UpdatedDate != value))
+				{
+					this.OnUpdatedDateChanging(value);
+					this.SendPropertyChanging();
+					this._UpdatedDate = value;
+					this.SendPropertyChanged("UpdatedDate");
+					this.OnUpdatedDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrnReturn_TrnReturnBook", Storage="_TrnReturnBooks", ThisKey="Id", OtherKey="ReturnId")]
+		public EntitySet<TrnReturnBook> TrnReturnBooks
+		{
+			get
+			{
+				return this._TrnReturnBooks;
+			}
+			set
+			{
+				this._TrnReturnBooks.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrnReturn_TrnReturnBook1", Storage="_TrnReturnBooks1", ThisKey="Id", OtherKey="ReturnId")]
+		public EntitySet<TrnReturnBook> TrnReturnBooks1
+		{
+			get
+			{
+				return this._TrnReturnBooks1;
+			}
+			set
+			{
+				this._TrnReturnBooks1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstBorrower_TrnReturn", Storage="_MstBorrower", ThisKey="BorrowerId", OtherKey="Id", IsForeignKey=true)]
+		public MstBorrower MstBorrower
+		{
+			get
+			{
+				return this._MstBorrower.Entity;
+			}
+			set
+			{
+				MstBorrower previousValue = this._MstBorrower.Entity;
 				if (((previousValue != value) 
-							|| (this._TrnReturn.HasLoadedOrAssignedValue == false)))
+							|| (this._MstBorrower.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._TrnReturn.Entity = null;
-						previousValue.TrnReturnBooks.Remove(this);
+						this._MstBorrower.Entity = null;
+						previousValue.TrnReturns.Remove(this);
 					}
-					this._TrnReturn.Entity = value;
+					this._MstBorrower.Entity = value;
 					if ((value != null))
 					{
-						value.TrnReturnBooks.Add(this);
-						this._ReturnId = value.Id;
+						value.TrnReturns.Add(this);
+						this._BorrowerId = value.Id;
 					}
 					else
 					{
-						this._ReturnId = default(int);
+						this._BorrowerId = default(int);
 					}
-					this.SendPropertyChanged("TrnReturn");
+					this.SendPropertyChanged("MstBorrower");
 				}
 			}
 		}
@@ -483,6 +659,30 @@ namespace project_ls.Data
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_TrnReturnBooks(TrnReturnBook entity)
+		{
+			this.SendPropertyChanging();
+			entity.TrnReturn = this;
+		}
+		
+		private void detach_TrnReturnBooks(TrnReturnBook entity)
+		{
+			this.SendPropertyChanging();
+			entity.TrnReturn = null;
+		}
+		
+		private void attach_TrnReturnBooks1(TrnReturnBook entity)
+		{
+			this.SendPropertyChanging();
+			entity.TrnReturn1 = this;
+		}
+		
+		private void detach_TrnReturnBooks1(TrnReturnBook entity)
+		{
+			this.SendPropertyChanging();
+			entity.TrnReturn1 = null;
 		}
 	}
 	
@@ -1407,11 +1607,11 @@ namespace project_ls.Data
 		
 		private int _LibraryCardId;
 		
+		private EntitySet<TrnReturn> _TrnReturns;
+		
 		private EntitySet<MstLibaryCard> _MstLibaryCards;
 		
 		private EntitySet<TrnBorrow> _TrnBorrows;
-		
-		private EntitySet<TrnReturn> _TrnReturns;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -1445,9 +1645,9 @@ namespace project_ls.Data
 		
 		public MstBorrower()
 		{
+			this._TrnReturns = new EntitySet<TrnReturn>(new Action<TrnReturn>(this.attach_TrnReturns), new Action<TrnReturn>(this.detach_TrnReturns));
 			this._MstLibaryCards = new EntitySet<MstLibaryCard>(new Action<MstLibaryCard>(this.attach_MstLibaryCards), new Action<MstLibaryCard>(this.detach_MstLibaryCards));
 			this._TrnBorrows = new EntitySet<TrnBorrow>(new Action<TrnBorrow>(this.attach_TrnBorrows), new Action<TrnBorrow>(this.detach_TrnBorrows));
-			this._TrnReturns = new EntitySet<TrnReturn>(new Action<TrnReturn>(this.attach_TrnReturns), new Action<TrnReturn>(this.detach_TrnReturns));
 			OnCreated();
 		}
 		
@@ -1691,6 +1891,19 @@ namespace project_ls.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstBorrower_TrnReturn", Storage="_TrnReturns", ThisKey="Id", OtherKey="BorrowerId")]
+		public EntitySet<TrnReturn> TrnReturns
+		{
+			get
+			{
+				return this._TrnReturns;
+			}
+			set
+			{
+				this._TrnReturns.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstBorrower_MstLibaryCard", Storage="_MstLibaryCards", ThisKey="Id", OtherKey="BorrowerId")]
 		public EntitySet<MstLibaryCard> MstLibaryCards
 		{
@@ -1717,19 +1930,6 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstBorrower_TrnReturn", Storage="_TrnReturns", ThisKey="Id", OtherKey="BorrowerId")]
-		public EntitySet<TrnReturn> TrnReturns
-		{
-			get
-			{
-				return this._TrnReturns;
-			}
-			set
-			{
-				this._TrnReturns.Assign(value);
-			}
-		}
-		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -1748,6 +1948,18 @@ namespace project_ls.Data
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_TrnReturns(TrnReturn entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstBorrower = this;
+		}
+		
+		private void detach_TrnReturns(TrnReturn entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstBorrower = null;
 		}
 		
 		private void attach_MstLibaryCards(MstLibaryCard entity)
@@ -1769,18 +1981,6 @@ namespace project_ls.Data
 		}
 		
 		private void detach_TrnBorrows(TrnBorrow entity)
-		{
-			this.SendPropertyChanging();
-			entity.MstBorrower = null;
-		}
-		
-		private void attach_TrnReturns(TrnReturn entity)
-		{
-			this.SendPropertyChanging();
-			entity.MstBorrower = this;
-		}
-		
-		private void detach_TrnReturns(TrnReturn entity)
 		{
 			this.SendPropertyChanging();
 			entity.MstBorrower = null;
@@ -2205,6 +2405,8 @@ namespace project_ls.Data
 		
 		private System.DateTime _UpdatedDate;
 		
+		private EntitySet<TrnReturnBook> _TrnReturnBooks;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -2241,6 +2443,7 @@ namespace project_ls.Data
 		
 		public MstLibraryBook()
 		{
+			this._TrnReturnBooks = new EntitySet<TrnReturnBook>(new Action<TrnReturnBook>(this.attach_TrnReturnBooks), new Action<TrnReturnBook>(this.detach_TrnReturnBooks));
 			OnCreated();
 		}
 		
@@ -2524,6 +2727,19 @@ namespace project_ls.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstLibraryBook_TrnReturnBook", Storage="_TrnReturnBooks", ThisKey="Id", OtherKey="BookId")]
+		public EntitySet<TrnReturnBook> TrnReturnBooks
+		{
+			get
+			{
+				return this._TrnReturnBooks;
+			}
+			set
+			{
+				this._TrnReturnBooks.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -2542,6 +2758,18 @@ namespace project_ls.Data
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_TrnReturnBooks(TrnReturnBook entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstLibraryBook = this;
+		}
+		
+		private void detach_TrnReturnBooks(TrnReturnBook entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstLibraryBook = null;
 		}
 	}
 	
@@ -3542,35 +3770,25 @@ namespace project_ls.Data
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TrnReturn")]
-	public partial class TrnReturn : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TrnReturnBook")]
+	public partial class TrnReturnBook : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
 		private int _Id;
 		
-		private int _ReturnNumber;
+		private int _ReturnId;
 		
-		private System.DateTime _ReturnDate;
+		private int _BookId;
 		
-		private System.Nullable<int> _ManualReturnNumber;
+		private int _Quantity;
 		
-		private int _BorrowerId;
+		private EntityRef<MstLibraryBook> _MstLibraryBook;
 		
-		private string _PreparedByUser;
+		private EntityRef<TrnReturn> _TrnReturn;
 		
-		private int _CreatedByUserId;
-		
-		private System.DateTime _CreatedDate;
-		
-		private System.Nullable<int> _UpdatedByUserId;
-		
-		private System.Nullable<System.DateTime> _UpdatedDate;
-		
-		private EntitySet<TrnReturnBook> _TrnReturnBooks;
-		
-		private EntityRef<MstBorrower> _MstBorrower;
+		private EntityRef<TrnReturn> _TrnReturn1;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -3578,30 +3796,19 @@ namespace project_ls.Data
     partial void OnCreated();
     partial void OnIdChanging(int value);
     partial void OnIdChanged();
-    partial void OnReturnNumberChanging(int value);
-    partial void OnReturnNumberChanged();
-    partial void OnReturnDateChanging(System.DateTime value);
-    partial void OnReturnDateChanged();
-    partial void OnManualReturnNumberChanging(System.Nullable<int> value);
-    partial void OnManualReturnNumberChanged();
-    partial void OnBorrowerIdChanging(int value);
-    partial void OnBorrowerIdChanged();
-    partial void OnPreparedByUserChanging(string value);
-    partial void OnPreparedByUserChanged();
-    partial void OnCreatedByUserIdChanging(int value);
-    partial void OnCreatedByUserIdChanged();
-    partial void OnCreatedDateChanging(System.DateTime value);
-    partial void OnCreatedDateChanged();
-    partial void OnUpdatedByUserIdChanging(System.Nullable<int> value);
-    partial void OnUpdatedByUserIdChanged();
-    partial void OnUpdatedDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnUpdatedDateChanged();
+    partial void OnReturnIdChanging(int value);
+    partial void OnReturnIdChanged();
+    partial void OnBookIdChanging(int value);
+    partial void OnBookIdChanged();
+    partial void OnQuantityChanging(int value);
+    partial void OnQuantityChanged();
     #endregion
 		
-		public TrnReturn()
+		public TrnReturnBook()
 		{
-			this._TrnReturnBooks = new EntitySet<TrnReturnBook>(new Action<TrnReturnBook>(this.attach_TrnReturnBooks), new Action<TrnReturnBook>(this.detach_TrnReturnBooks));
-			this._MstBorrower = default(EntityRef<MstBorrower>);
+			this._MstLibraryBook = default(EntityRef<MstLibraryBook>);
+			this._TrnReturn = default(EntityRef<TrnReturn>);
+			this._TrnReturn1 = default(EntityRef<TrnReturn>);
 			OnCreated();
 		}
 		
@@ -3625,233 +3832,172 @@ namespace project_ls.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReturnNumber", DbType="Int NOT NULL")]
-		public int ReturnNumber
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReturnId", DbType="Int NOT NULL")]
+		public int ReturnId
 		{
 			get
 			{
-				return this._ReturnNumber;
+				return this._ReturnId;
 			}
 			set
 			{
-				if ((this._ReturnNumber != value))
+				if ((this._ReturnId != value))
 				{
-					this.OnReturnNumberChanging(value);
-					this.SendPropertyChanging();
-					this._ReturnNumber = value;
-					this.SendPropertyChanged("ReturnNumber");
-					this.OnReturnNumberChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReturnDate", DbType="DateTime NOT NULL")]
-		public System.DateTime ReturnDate
-		{
-			get
-			{
-				return this._ReturnDate;
-			}
-			set
-			{
-				if ((this._ReturnDate != value))
-				{
-					this.OnReturnDateChanging(value);
-					this.SendPropertyChanging();
-					this._ReturnDate = value;
-					this.SendPropertyChanged("ReturnDate");
-					this.OnReturnDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ManualReturnNumber", DbType="Int")]
-		public System.Nullable<int> ManualReturnNumber
-		{
-			get
-			{
-				return this._ManualReturnNumber;
-			}
-			set
-			{
-				if ((this._ManualReturnNumber != value))
-				{
-					this.OnManualReturnNumberChanging(value);
-					this.SendPropertyChanging();
-					this._ManualReturnNumber = value;
-					this.SendPropertyChanged("ManualReturnNumber");
-					this.OnManualReturnNumberChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BorrowerId", DbType="Int NOT NULL")]
-		public int BorrowerId
-		{
-			get
-			{
-				return this._BorrowerId;
-			}
-			set
-			{
-				if ((this._BorrowerId != value))
-				{
-					if (this._MstBorrower.HasLoadedOrAssignedValue)
+					if ((this._TrnReturn.HasLoadedOrAssignedValue || this._TrnReturn1.HasLoadedOrAssignedValue))
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
-					this.OnBorrowerIdChanging(value);
+					this.OnReturnIdChanging(value);
 					this.SendPropertyChanging();
-					this._BorrowerId = value;
-					this.SendPropertyChanged("BorrowerId");
-					this.OnBorrowerIdChanged();
+					this._ReturnId = value;
+					this.SendPropertyChanged("ReturnId");
+					this.OnReturnIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PreparedByUser", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
-		public string PreparedByUser
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BookId", DbType="Int NOT NULL")]
+		public int BookId
 		{
 			get
 			{
-				return this._PreparedByUser;
+				return this._BookId;
 			}
 			set
 			{
-				if ((this._PreparedByUser != value))
+				if ((this._BookId != value))
 				{
-					this.OnPreparedByUserChanging(value);
+					if (this._MstLibraryBook.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnBookIdChanging(value);
 					this.SendPropertyChanging();
-					this._PreparedByUser = value;
-					this.SendPropertyChanged("PreparedByUser");
-					this.OnPreparedByUserChanged();
+					this._BookId = value;
+					this.SendPropertyChanged("BookId");
+					this.OnBookIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedByUserId", DbType="Int NOT NULL")]
-		public int CreatedByUserId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Quantity", DbType="Int NOT NULL")]
+		public int Quantity
 		{
 			get
 			{
-				return this._CreatedByUserId;
+				return this._Quantity;
 			}
 			set
 			{
-				if ((this._CreatedByUserId != value))
+				if ((this._Quantity != value))
 				{
-					this.OnCreatedByUserIdChanging(value);
+					this.OnQuantityChanging(value);
 					this.SendPropertyChanging();
-					this._CreatedByUserId = value;
-					this.SendPropertyChanged("CreatedByUserId");
-					this.OnCreatedByUserIdChanged();
+					this._Quantity = value;
+					this.SendPropertyChanged("Quantity");
+					this.OnQuantityChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="DateTime NOT NULL")]
-		public System.DateTime CreatedDate
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstLibraryBook_TrnReturnBook", Storage="_MstLibraryBook", ThisKey="BookId", OtherKey="Id", IsForeignKey=true)]
+		public MstLibraryBook MstLibraryBook
 		{
 			get
 			{
-				return this._CreatedDate;
+				return this._MstLibraryBook.Entity;
 			}
 			set
 			{
-				if ((this._CreatedDate != value))
-				{
-					this.OnCreatedDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreatedDate = value;
-					this.SendPropertyChanged("CreatedDate");
-					this.OnCreatedDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UpdatedByUserId", DbType="Int")]
-		public System.Nullable<int> UpdatedByUserId
-		{
-			get
-			{
-				return this._UpdatedByUserId;
-			}
-			set
-			{
-				if ((this._UpdatedByUserId != value))
-				{
-					this.OnUpdatedByUserIdChanging(value);
-					this.SendPropertyChanging();
-					this._UpdatedByUserId = value;
-					this.SendPropertyChanged("UpdatedByUserId");
-					this.OnUpdatedByUserIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UpdatedDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> UpdatedDate
-		{
-			get
-			{
-				return this._UpdatedDate;
-			}
-			set
-			{
-				if ((this._UpdatedDate != value))
-				{
-					this.OnUpdatedDateChanging(value);
-					this.SendPropertyChanging();
-					this._UpdatedDate = value;
-					this.SendPropertyChanged("UpdatedDate");
-					this.OnUpdatedDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrnReturn_TrnReturnBook", Storage="_TrnReturnBooks", ThisKey="Id", OtherKey="ReturnId")]
-		public EntitySet<TrnReturnBook> TrnReturnBooks
-		{
-			get
-			{
-				return this._TrnReturnBooks;
-			}
-			set
-			{
-				this._TrnReturnBooks.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstBorrower_TrnReturn", Storage="_MstBorrower", ThisKey="BorrowerId", OtherKey="Id", IsForeignKey=true)]
-		public MstBorrower MstBorrower
-		{
-			get
-			{
-				return this._MstBorrower.Entity;
-			}
-			set
-			{
-				MstBorrower previousValue = this._MstBorrower.Entity;
+				MstLibraryBook previousValue = this._MstLibraryBook.Entity;
 				if (((previousValue != value) 
-							|| (this._MstBorrower.HasLoadedOrAssignedValue == false)))
+							|| (this._MstLibraryBook.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._MstBorrower.Entity = null;
-						previousValue.TrnReturns.Remove(this);
+						this._MstLibraryBook.Entity = null;
+						previousValue.TrnReturnBooks.Remove(this);
 					}
-					this._MstBorrower.Entity = value;
+					this._MstLibraryBook.Entity = value;
 					if ((value != null))
 					{
-						value.TrnReturns.Add(this);
-						this._BorrowerId = value.Id;
+						value.TrnReturnBooks.Add(this);
+						this._BookId = value.Id;
 					}
 					else
 					{
-						this._BorrowerId = default(int);
+						this._BookId = default(int);
 					}
-					this.SendPropertyChanged("MstBorrower");
+					this.SendPropertyChanged("MstLibraryBook");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrnReturn_TrnReturnBook", Storage="_TrnReturn", ThisKey="ReturnId", OtherKey="Id", IsForeignKey=true)]
+		public TrnReturn TrnReturn
+		{
+			get
+			{
+				return this._TrnReturn.Entity;
+			}
+			set
+			{
+				TrnReturn previousValue = this._TrnReturn.Entity;
+				if (((previousValue != value) 
+							|| (this._TrnReturn.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TrnReturn.Entity = null;
+						previousValue.TrnReturnBooks.Remove(this);
+					}
+					this._TrnReturn.Entity = value;
+					if ((value != null))
+					{
+						value.TrnReturnBooks.Add(this);
+						this._ReturnId = value.Id;
+					}
+					else
+					{
+						this._ReturnId = default(int);
+					}
+					this.SendPropertyChanged("TrnReturn");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrnReturn_TrnReturnBook1", Storage="_TrnReturn1", ThisKey="ReturnId", OtherKey="Id", IsForeignKey=true)]
+		public TrnReturn TrnReturn1
+		{
+			get
+			{
+				return this._TrnReturn1.Entity;
+			}
+			set
+			{
+				TrnReturn previousValue = this._TrnReturn1.Entity;
+				if (((previousValue != value) 
+							|| (this._TrnReturn1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TrnReturn1.Entity = null;
+						previousValue.TrnReturnBooks1.Remove(this);
+					}
+					this._TrnReturn1.Entity = value;
+					if ((value != null))
+					{
+						value.TrnReturnBooks1.Add(this);
+						this._ReturnId = value.Id;
+					}
+					else
+					{
+						this._ReturnId = default(int);
+					}
+					this.SendPropertyChanged("TrnReturn1");
 				}
 			}
 		}
@@ -3874,18 +4020,6 @@ namespace project_ls.Data
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_TrnReturnBooks(TrnReturnBook entity)
-		{
-			this.SendPropertyChanging();
-			entity.TrnReturn = this;
-		}
-		
-		private void detach_TrnReturnBooks(TrnReturnBook entity)
-		{
-			this.SendPropertyChanging();
-			entity.TrnReturn = null;
 		}
 	}
 }

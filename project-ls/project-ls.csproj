@@ -215,6 +215,7 @@
     <Compile Include="ApiControllers\ApiMstUserController.cs" />
     <Compile Include="ApiControllers\ApiMstBorrowerController.cs" />
     <Compile Include="ApiControllers\ApiTrnBorrowController.cs" />
+    <Compile Include="ApiControllers\ApiTrnReturnController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -265,6 +266,8 @@
     <Compile Include="Entities\MtsLibraryBooks.cs" />
     <Compile Include="Entities\TrnBorrow.cs" />
     <Compile Include="Entities\TrnBorrowBook.cs" />
+    <Compile Include="Entities\TrnReturn.cs" />
+    <Compile Include="Entities\TrnReturnBook.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

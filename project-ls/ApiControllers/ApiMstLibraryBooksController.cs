@@ -29,7 +29,7 @@ namespace project_ls.ApiControllers
 
                 var userType = currentUserType.FirstOrDefault();
 
-                if ( userType == "Admin" )
+                if (userType == "Admin")
                 {
                     var bookNumber = from d in db.MstLibraryBooks
                                      where d.BookNumber == objLibraryBook.BookNumber
@@ -60,10 +60,7 @@ namespace project_ls.ApiControllers
                             UpdatedByUserId = currentUser.FirstOrDefault().Id,
                             UpdatedBy = currentUser.FirstOrDefault().FirstName,
                             UpdatedDate = DateTime.Now,
-
-
                         };
-
                         db.MstLibraryBooks.InsertOnSubmit(newLibraryBook);
                         db.SubmitChanges();
 
@@ -74,7 +71,6 @@ namespace project_ls.ApiControllers
                 {
                     return Request.CreateResponse(HttpStatusCode.BadRequest, "Sorry. You're not authorize!");
                 }
-
             }
             catch (Exception e)
             {
@@ -112,7 +108,6 @@ namespace project_ls.ApiControllers
             return bookList.ToList();
         }
 
-
         // =============
         // Update - Book
         // =============
@@ -124,7 +119,7 @@ namespace project_ls.ApiControllers
                 var currentBook = from d in db.MstLibraryBooks
                                   where d.Id == Convert.ToInt32(id)
                                   select d;
-                 
+
                 if (currentBook.Any())
                 {
                     var currentUser = from d in db.MstUsers
@@ -136,6 +131,7 @@ namespace project_ls.ApiControllers
                     updateBook.Title = objUpdateBook.Title;
                     updateBook.Author = objUpdateBook.Author;
                     updateBook.EditionNumber = objUpdateBook.EditionNumber;
+                    updateBook.PlaceOfPublication = objUpdateBook.PlaceOfPublication;
                     updateBook.CopyRightDate = Convert.ToDateTime(objUpdateBook.CopyRightDate);
                     updateBook.ISBN = objUpdateBook.ISBN;
                     updateBook.UpdatedByUserId = currentUser.FirstOrDefault().Id;
@@ -189,6 +185,5 @@ namespace project_ls.ApiControllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError);
             }
         }
-
     }
 }

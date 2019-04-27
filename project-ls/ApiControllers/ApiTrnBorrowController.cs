@@ -59,7 +59,7 @@ namespace project_ls.ApiControllers
                             newBookBorrows.Add(new Data.TrnBorrowBook
                             {
                                 BorrowId = BorrowId,
-                                BookId = Book.BookId, 
+                                BookId = Book.BookId,
                                 Quantity = Book.Quantity
                             });
                         }
@@ -79,6 +79,79 @@ namespace project_ls.ApiControllers
             {
                 Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "Something's went wrong from the server.");
+            }
+        }
+
+        // ================
+        // List- Trn Borrow
+        // ================
+        [HttpGet, Route("List")]
+        public List<Entities.TrnBorrow> GetListTrnBorrow()
+        {
+
+            var listTrnBorrow = from d in db.TrnBorrows
+                                select new Entities.TrnBorrow
+                                {
+                                    Id = d.Id,
+                                    BorrowNumber = d.BorrowerId,
+                                    BorrowDate = d.BorrowDate.ToShortDateString(),
+                                    ManualBorrowNumber = d.ManualBorrowNumber,
+                                    BorrowerId = d.BorrowerId,
+                                    LibraryCardId = d.LibraryCardId,
+                                    PreparedByUser = d.PreparedByUser,
+                                    CreatedByUserId = d.CreatedByUserId,
+                                    CreatedDate = d.CreatedDate.ToShortDateString(),
+                                    UpdatedByUserId = d.UpdatedByUserId,
+                                    UpdatedDate = d.UpdatedDate.ToShortDateString()
+                                };
+
+            return listTrnBorrow.ToList();
+        }
+
+        // ==================
+        // Update- Trn Borrow
+        // ==================
+        [HttpPut, Route("Update/{id}")]
+        public HttpResponseMessage UpdateTrnBorrow(Entities.TrnBorrow objUpdateTrnBorrow, String id)
+        {
+            try
+            {
+                var currentTrnBorrow = from d in db.TrnBorrows
+                                  where d.Id == Convert.ToInt32(id)
+                                  select d;
+
+                if (currentTrnBorrow.Any())
+                {
+                    var currentUser = from d in db.MstUsers
+                                      where d.AspNetUserId == User.Identity.GetUserId()
+                                      select d;
+
+                    var updateTrnBorrow = currentTrnBorrow.FirstOrDefault();
+                    updateTrnBorrow.BorrowNumber = objUpdateTrnBorrow.BookNumber;
+                    updateTrnBorrow.BorrowDate = Convert.ToDateTime(objUpdateTrnBorrow.BorrowDate);
+                    updateTrnBorrow.ManualBorrowNumber = objUpdateTrnBorrow.ManualBorrowNumber;
+                    updateTrnBorrow.BorrowerId = objUpdateTrnBorrow.BorrowerId;
+                    updateTrnBorrow.LibraryCardId = objUpdateTrnBorrow.LibraryCardId;
+                    updateTrnBorrow.PreparedByUser = objUpdateTrnBorrow.PreparedByUser;
+                    updateTrnBorrow.CreatedByUserId = objUpdateTrnBorrow.CreatedByUserId;
+                    updateTrnBorrow.CreatedDate = Convert.ToDateTime(objUpdateTrnBorrow.CreatedDate);
+                    updateTrnBorrow.UpdatedByUserId = currentUser.FirstOrDefault().Id;
+                    updateTrnBorrow.UpdatedDate = DateTime.Now;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError);
             }
         }
     }
