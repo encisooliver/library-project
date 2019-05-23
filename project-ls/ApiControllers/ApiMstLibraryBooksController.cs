@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace project_ls.ApiControllers
 {
-    [Authorize, RoutePrefix("api/Library/Book")]
+    [RoutePrefix("api/Library/Book")]
     public class ApiMstLibraryBooksController : ApiController
     {
         private Data.librarydbDataContext db = new Data.librarydbDataContext();

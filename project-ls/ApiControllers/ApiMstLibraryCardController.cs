@@ -26,8 +26,6 @@ namespace project_ls.ApiControllers
                                   where d.Id == objLibraryCard.Id && d.LibraryCardNumber == objLibraryCard.LibraryCardNumber
                                   select d;
 
-
-
                 if (libraryCard.Any())
                 {
                     return Request.CreateResponse(HttpStatusCode.BadRequest, "Library card already exist!");
@@ -51,7 +49,6 @@ namespace project_ls.ApiControllers
                         CreatedDate = DateTime.Now,
                         UpdatedByUserId = currentUser.FirstOrDefault().Id,
                         UpdatedDate = DateTime.Now,
-
                     };
 
                     db.MstLibaryCards.InsertOnSubmit(newLibraryCard);
